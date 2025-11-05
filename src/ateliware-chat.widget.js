@@ -283,7 +283,7 @@
       if (inputContainer) inputContainer.classList.add("thinking");
       // Troca o ícone de estrelas para colorido
       const inputStar = shadow.getElementById("acw-input-star");
-      if (inputStar) inputStar.src = "../src/icon/stars.svg";
+  if (inputStar) inputStar.src = CDN_BASE + "icon/stars.svg";
       // Cria controller para cancelar fetch
       currentAbortController = new AbortController();
 
@@ -352,7 +352,7 @@
         // Remove borda gradiente do container do input
         if (inputContainer) inputContainer.classList.remove("thinking");
         // Volta o ícone de estrelas para cinza
-        if (inputStar) inputStar.src = "../src/icon/starsGray.svg";
+  if (inputStar) inputStar.src = CDN_BASE + "icon/starsGray.svg";
         currentAbortController = null;
       }
     }
