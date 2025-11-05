@@ -52,7 +52,7 @@
   };
 
   // ===== CONFIGURAÇÃO =====
-  const CDN_BASE = "https://cdn.jsdelivr.net/gh/atom6development/ateliware-chat-bot@v1.0.0/src/";
+  const CDN_BASE = "https://cdn.jsdelivr.net/gh/atom6development/ateliware-chat-bot@v1.0.3/src/";
   const CONFIG = {
     cssUrl: CDN_BASE + "ateliware-chat.style.css",
     tplUrl: CDN_BASE + "ateliware-chat.template.html",
@@ -169,12 +169,13 @@
     link.setAttribute("href", CONFIG.cssUrl);
     shadow.appendChild(link);
 
-    // carrega template HTML
-    const html = await loadText(CONFIG.tplUrl);
-    const tplWrap = document.createElement("div");
-    tplWrap.innerHTML = html;
-    // garante que só os nós do template entram no shadow
-    [...tplWrap.childNodes].forEach((n) => shadow.appendChild(n));
+  // carrega template HTML e faz substituição dinâmica do CDN_BASE
+  let html = await loadText(CONFIG.tplUrl);
+  html = html.replace(/__CDN_BASE__/g, CDN_BASE);
+  const tplWrap = document.createElement("div");
+  tplWrap.innerHTML = html;
+  // garante que só os nós do template entram no shadow
+  [...tplWrap.childNodes].forEach((n) => shadow.appendChild(n));
 
     // aplica tema via CSS vars no :host (agora só zIndex)
     const rootStyle = document.createElement("style");
