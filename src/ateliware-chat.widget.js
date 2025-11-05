@@ -52,9 +52,10 @@
   };
 
   // ===== CONFIGURAÇÃO =====
+  const CDN_BASE = "https://cdn.jsdelivr.net/gh/atom6development/ateliware-chat-bot@v1.0.0/src/";
   const CONFIG = {
-    cssUrl: "../src/atom-chat.style.css",
-    tplUrl: "../src/atom-chat.template.html",
+    cssUrl: CDN_BASE + "ateliware-chat.style.css",
+    tplUrl: CDN_BASE + "ateliware-chat.template.html",
     ui: {
       zIndex: 999999,
       position: "right",
