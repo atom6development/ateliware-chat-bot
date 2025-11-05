@@ -1,0 +1,91 @@
+<!-- FAB -->
+<button class="acw-fab" aria-label="Abrir chat">
+  <img src="../src/icon/stars.svg" />
+  <span class="fab-text">Pergunte à IA</span>
+</button>
+
+<!-- Modal -->
+<div class="acw-modal" role="dialog" aria-modal="true" aria-label="Fale com a IA">
+  <div class="acw-header">
+    <button class="acw-close" title="Limpar Chat" aria-label="Limpar Chat">
+      <img src="../src/icon/pencil.svg" />
+    </button>
+    <button class="acw-close" title="Fechar chat" aria-label="Fechar">×</button>
+  </div>
+
+  <div class="acw-messages" id="acw-messages">
+    <!-- Template customizado para assistant -->
+    <template id="acw-assistant-template">
+      <div class="acw-msg assistant">
+        <img src="../src/icon/globeStar.svg" class="acw-assistant-icon" />
+        <span class="acw-assistant-text">Pensando...</span>
+      </div>
+    </template>
+    <div class="acw-hello">
+      <div>
+        <h2>
+          Olá, o que você quer saber mais?
+        </h2>
+        <p>
+          Faça uma pergunta ou escolha um atalho abaixo:
+        </p>
+      </div>
+      <div class="acw-swiper-cards">
+        <ul>
+          <li class="acw-card">
+            <div class="acw-card-star" aria-hidden="true">
+              <img src="../src/icon/oneStarGray.svg" class="star-gray" />
+              <img src="../src/icon/oneStar.svg" class="star-color" />
+            </div>
+            <span class="acw-card-text">
+              Lorem ipsum dollor et sum
+            </span>
+          </li>
+          </li>
+          <li class="acw-card">
+            <div class="acw-card-star" aria-hidden="true">
+              <img src="../src/icon/oneStarGray.svg" class="star-gray" />
+              <img src="../src/icon/oneStar.svg" class="star-color" />
+            </div>
+            <span class="acw-card-text">
+              Lorem ipsum dollor et sum
+            </span>
+          </li>
+          </li>
+          <li class="acw-card">
+            <div class="acw-card-star" aria-hidden="true">
+              <img src="../src/icon/oneStarGray.svg" class="star-gray" />
+              <img src="../src/icon/oneStar.svg" class="star-color" />
+            </div>
+            <span class="acw-card-text">
+              Lorem ipsum dollor et sum
+            </span>
+          </li>
+          </li>
+          <li class="acw-card">
+            <div class="acw-card-star" aria-hidden="true">
+              <img src="../src/icon/oneStarGray.svg" class="star-gray" />
+              <img src="../src/icon/oneStar.svg" class="star-color" />
+            </div>
+            <span class="acw-card-text">
+              Lorem ipsum dollor et sum
+            </span>
+          </li>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="acw-footer">
+    <div class="acw-input-container">
+      <img id="acw-input-star" class="acw-input-star" src="../src/icon/starsGray.svg" />
+      <textarea class="acw-input" rows="1" placeholder="Faça a sua pergunta"
+        aria-label="Digite sua mensagem"></textarea>
+      <button class="acw-send" aria-label="Enviar">
+        <img src="../src/icon/rightArrow.svg" class="acw-send-icon" />
+        <img src="../src/icon/pause.svg" class="acw-pause-icon" style="display:none;" />
+      </button>
+    </div>
+  </div>
+</div>
