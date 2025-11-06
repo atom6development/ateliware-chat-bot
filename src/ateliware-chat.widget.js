@@ -52,7 +52,8 @@
   };
 
   // ===== CONFIGURAÇÃO =====
-  const CDN_BASE = "https://cdn.jsdelivr.net/gh/atom6development/ateliware-chat-bot@v1.0.4/src/";
+  const CDN_BASE = "https://cdn.jsdelivr.net/gh/atom6development/ateliware-chat-bot@v1.0.5/src/";
+  // const CDN_BASE = "../src/"; // para desenvolvimento local
   const CONFIG = {
     cssUrl: CDN_BASE + "ateliware-chat.style.css",
     tplUrl: CDN_BASE + "ateliware-chat.template.html",
@@ -109,10 +110,11 @@
 
     // Função para transformar URLs em links clicáveis
     function linkify(text) {
-      const urlRegex = /(https?:\/\/[\w\-._~:/?#[\]@!$&'()*+,;=%]+)|(www\.[\w\-._~:/?#[\]@!$&'()*+,;=%]+)/gi;
-      return text.replace(urlRegex, function(url) {
+      const urlRegex =
+        /(https?:\/\/[\w\-._~:/?#[\]@!$&'()*+,;=%]+)|(www\.[\w\-._~:/?#[\]@!$&'()*+,;=%]+)/gi;
+      return text.replace(urlRegex, function (url) {
         let href = url;
-        if (!href.startsWith('http')) href = 'https://' + href;
+        if (!href.startsWith("http")) href = "https://" + href;
         return `<a href="${href}" target="_blank" rel="noopener noreferrer">${url}</a>`;
       });
     }
@@ -161,6 +163,7 @@
     }
     // host & shadow
     const host = document.createElement("div");
+    host.id = "float-ia";
     const shadow = host.attachShadow({ mode: "open" });
 
     // injeta CSS via <link> dentro do shadow
@@ -169,13 +172,13 @@
     link.setAttribute("href", CONFIG.cssUrl);
     shadow.appendChild(link);
 
-  // carrega template HTML e faz substituição dinâmica do CDN_BASE
-  let html = await loadText(CONFIG.tplUrl);
-  html = html.replace(/__CDN_BASE__/g, CDN_BASE);
-  const tplWrap = document.createElement("div");
-  tplWrap.innerHTML = html;
-  // garante que só os nós do template entram no shadow
-  [...tplWrap.childNodes].forEach((n) => shadow.appendChild(n));
+    // carrega template HTML e faz substituição dinâmica do CDN_BASE
+    let html = await loadText(CONFIG.tplUrl);
+    html = html.replace(/__CDN_BASE__/g, CDN_BASE);
+    const tplWrap = document.createElement("div");
+    tplWrap.innerHTML = html;
+    // garante que só os nós do template entram no shadow
+    [...tplWrap.childNodes].forEach((n) => shadow.appendChild(n));
 
     // aplica tema via CSS vars no :host (agora só zIndex)
     const rootStyle = document.createElement("style");
@@ -216,6 +219,24 @@
     }
     updateSendBtnState();
 
+    // Troca estrela do input ao focar/desfocar
+    const inputStar = shadow.getElementById("acw-input-star");
+    const inputContainer = shadow.querySelector(".acw-input-container");
+    if (input && inputStar && inputContainer) {
+      input.addEventListener("focus", () => {
+        // Só troca se não estiver "thinking"
+        if (!inputContainer.classList.contains("thinking")) {
+          inputStar.src = CDN_BASE + "icon/stars.svg";
+        }
+      });
+      input.addEventListener("blur", () => {
+        // Só volta para cinza se não estiver "thinking"
+        if (!inputContainer.classList.contains("thinking")) {
+          inputStar.src = CDN_BASE + "icon/starsGray.svg";
+        }
+      });
+    }
+
     // estado
     const history = []; // {role, content}[]
     let isOpen = false;
@@ -225,6 +246,7 @@
       isOpen = true;
       if (modal) modal.classList.add("acw-open");
       if (overlay) overlay.classList.add("acw-open");
+      if (fab) fab.classList.add("acw-fab--gradient");
       input?.focus();
       // Se já houver mensagens, esconde o bloco hello
       if (helloBlock && inbox.querySelector(".acw-msg")) {
@@ -236,6 +258,7 @@
       isOpen = false;
       if (modal) modal.classList.remove("acw-open");
       if (overlay) overlay.classList.remove("acw-open");
+      if (fab) fab.classList.remove("acw-fab--gradient");
       fab?.focus();
     }
     function add(role, text) {
@@ -283,7 +306,7 @@
       if (inputContainer) inputContainer.classList.add("thinking");
       // Troca o ícone de estrelas para colorido
       const inputStar = shadow.getElementById("acw-input-star");
-  if (inputStar) inputStar.src = CDN_BASE + "icon/stars.svg";
+      if (inputStar) inputStar.src = CDN_BASE + "icon/stars.svg";
       // Cria controller para cancelar fetch
       currentAbortController = new AbortController();
 
@@ -352,17 +375,17 @@
         // Remove borda gradiente do container do input
         if (inputContainer) inputContainer.classList.remove("thinking");
         // Volta o ícone de estrelas para cinza
-  if (inputStar) inputStar.src = CDN_BASE + "icon/starsGray.svg";
+        if (inputStar) inputStar.src = CDN_BASE + "icon/starsGray.svg";
         currentAbortController = null;
       }
     }
 
     // função para lidar com clique nos cards
     function handleCardClick(e) {
-      const card = e.target.closest('.acw-card');
+      const card = e.target.closest(".acw-card");
       if (!card) return;
-      
-      const text = card.querySelector('span')?.textContent?.trim();
+
+      const text = card.querySelector("span")?.textContent?.trim();
       if (text) {
         input.value = text;
         input.focus();
@@ -377,8 +400,8 @@
     fab?.addEventListener("click", open);
     overlay?.addEventListener("click", close);
     // Adiciona evento de clique nos cards
-    const swiperCards = shadow.querySelector('.acw-swiper-cards');
-    swiperCards?.addEventListener('click', handleCardClick);
+    const swiperCards = shadow.querySelector(".acw-swiper-cards");
+    swiperCards?.addEventListener("click", handleCardClick);
     // O primeiro .acw-close (ícone de lápis) limpa o chat, o segundo fecha
     if (closeBtns.length > 1) {
       closeBtns[0].addEventListener("click", clearChat);
