@@ -52,7 +52,7 @@
   };
 
   // ===== CONFIGURAÇÃO =====
-  const CDN_BASE = "https://cdn.jsdelivr.net/gh/atom6development/ateliware-chat-bot@v1.0.5/src/";
+  const CDN_BASE = "https://cdn.jsdelivr.net/gh/atom6development/ateliware-chat-bot@v1.0.6/src/";
   // const CDN_BASE = "../src/"; // para desenvolvimento local
   const CONFIG = {
     cssUrl: CDN_BASE + "ateliware-chat.style.css",
