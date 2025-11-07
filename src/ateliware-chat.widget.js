@@ -107,6 +107,10 @@
       // Rola até o final de forma suave
       inbox.scrollTo({ top: inbox.scrollHeight, behavior: "smooth" });
     }
+      // Expor função global para abrir o chat externamente
+      window.openAteliwareChat = function() {
+        if (typeof open === 'function') open();
+      };
 
     // Função para transformar URLs em links clicáveis
     function linkify(text) {
