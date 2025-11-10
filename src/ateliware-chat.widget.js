@@ -52,7 +52,7 @@
   };
 
   // ===== CONFIGURAÇÃO =====
-  const CDN_BASE = "https://cdn.jsdelivr.net/gh/atom6development/ateliware-chat-bot@v1.0.7/src/";
+  const CDN_BASE = "https://cdn.jsdelivr.net/gh/atom6development/ateliware-chat-bot@v1.0.8/src/";
   // const CDN_BASE = "../src/"; // para desenvolvimento local
   const CONFIG = {
     cssUrl: CDN_BASE + "ateliware-chat.style.css",
@@ -69,10 +69,17 @@
           "Bearer 4e7c8bcd1f73f50c3a65af18c6d6f83e0f3e7a8f29c94c2d1a142a2e7bcd873f",
       },
       timeoutMs: 30000,
-      buildPayload: ({ message, user_id }) => ({
-        user_id,
-        question: message,
-      }),
+      buildPayload: ({ message, user_id }) => {
+        const conversation_id = localStorage.getItem("acw_conversation_id");
+        const payload = {
+          user_id,
+          question: message,
+        };
+        if (conversation_id) {
+          payload.conversation_id = conversation_id;
+        }
+        return payload;
+      },
       parseResponse: async (res) => {
         const data = await res.json();
         if (data.conversation_id) {
@@ -114,8 +121,8 @@
 
     // Função para transformar URLs em links clicáveis
     function linkify(text) {
-      const urlRegex =
-        /(https?:\/\/[\w\-._~:/?#[\]@!$&'()*+,;=%]+)|(www\.[\w\-._~:/?#[\]@!$&'()*+,;=%]+)/gi;
+      // Regex melhorado para capturar URLs, inclusive com caracteres especiais e sem espaço no final
+      const urlRegex = /(https?:\/\/(?:[\w-]+\.)+[\w-]+(?:[\w\-._~:/?#[\]@!$&'()*+,;=%]*)?)|(www\.(?:[\w-]+\.)+[\w-]+(?:[\w\-._~:/?#[\]@!$&'()*+,;=%]*)?)/gi;
       return text.replace(urlRegex, function (url) {
         let href = url;
         if (!href.startsWith("http")) href = "https://" + href;
@@ -340,8 +347,10 @@
           throw new Error(`Erro ${res.status}: ${t}`);
         }
         const reply = await CONFIG.api.parseResponse(res);
-        typing.querySelector(".acw-assistant-text").textContent =
-          reply || "(sem resposta)";
+        const textEl = typing.querySelector(".acw-assistant-text");
+        if (textEl) {
+          textEl.innerHTML = linkify(reply || "(sem resposta)");
+        }
         typing.classList.remove("acw-msg--pending");
         history.push({ role: "assistant", content: reply });
         // Scrolla para o final após a resposta ser exibida
