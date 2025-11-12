@@ -5,7 +5,7 @@
  * Autor: Atomsix
  */
 (() => {
-  // ===== HELPERS =====
+  //* ===== HELPERS =====
   function getOrCreateUserId() {
     const key = "acw_user_id";
     let id = localStorage.getItem(key);
@@ -52,8 +52,13 @@
   };
 
   // ===== CONFIGURAÇÃO =====
-  const CDN_BASE = "https://cdn.jsdelivr.net/gh/atom6development/ateliware-chat-bot@v1.0.8/src/";
-  // const CDN_BASE = "../src/"; // para desenvolvimento local
+
+  //!Para produção usar a linha abaixo
+  const CDN_BASE = "https://cdn.jsdelivr.net/gh/atom6development/ateliware-chat-bot@v1.0.9/src/";
+
+  //!Para desenvolvimento local remover comentário da linha abaixo
+  //const CDN_BASE = "../src/";
+
   const CONFIG = {
     cssUrl: CDN_BASE + "ateliware-chat.style.css",
     tplUrl: CDN_BASE + "ateliware-chat.template.html",
@@ -92,7 +97,7 @@
     },
   };
 
-  // ===== MONTAGEM E EVENTOS =====
+  //* ===== MONTAGEM E EVENTOS =====
   async function boot() {
     // Variável para controle de cancelamento
     let currentAbortController = null;
@@ -114,15 +119,16 @@
       // Rola até o final de forma suave
       inbox.scrollTo({ top: inbox.scrollHeight, behavior: "smooth" });
     }
-      // Expor função global para abrir o chat externamente
-      window.openAteliwareChat = function() {
-        if (typeof open === 'function') open();
-      };
+    // Expor função global para abrir o chat externamente
+    window.openAteliwareChat = function () {
+      if (typeof open === "function") open();
+    };
 
     // Função para transformar URLs em links clicáveis
     function linkify(text) {
       // Regex melhorado para capturar URLs, inclusive com caracteres especiais e sem espaço no final
-      const urlRegex = /(https?:\/\/(?:[\w-]+\.)+[\w-]+(?:[\w\-._~:/?#[\]@!$&'()*+,;=%]*)?)|(www\.(?:[\w-]+\.)+[\w-]+(?:[\w\-._~:/?#[\]@!$&'()*+,;=%]*)?)/gi;
+      const urlRegex =
+        /(https?:\/\/(?:[\w-]+\.)+[\w-]+(?:[\w\-._~:/?#[\]@!$&'()*+,;=%]*)?)|(www\.(?:[\w-]+\.)+[\w-]+(?:[\w\-._~:/?#[\]@!$&'()*+,;=%]*)?)/gi;
       return text.replace(urlRegex, function (url) {
         let href = url;
         if (!href.startsWith("http")) href = "https://" + href;
@@ -139,7 +145,6 @@
       textEl.innerHTML = linkify(text);
       if (isPending) node.classList.add("acw-msg--pending");
       inbox.appendChild(node);
-      // Não faz scroll aqui, só quando a resposta final chegar
       if (helloBlock) helloBlock.style.display = "none";
       return node;
     }
@@ -169,7 +174,7 @@
           });
         }
       } catch (e) {
-        // pode logar erro se quiser
+        //Adicionar erro se precisar
       }
     }
     // host & shadow
@@ -191,7 +196,7 @@
     // garante que só os nós do template entram no shadow
     [...tplWrap.childNodes].forEach((n) => shadow.appendChild(n));
 
-    // aplica tema via CSS vars no :host (agora só zIndex)
+    // aplica tema via CSS vars no :host
     const rootStyle = document.createElement("style");
     rootStyle.textContent = `
       :host {
@@ -216,6 +221,7 @@
     const inbox = shadow.querySelector("#acw-messages");
     const input = shadow.querySelector(".acw-input");
     const sendBtn = shadow.querySelector(".acw-send");
+    const clearInputBtn = shadow.querySelector(".acw-clear-input");
     const helloBlock = shadow.querySelector(".acw-hello");
 
     // desabilita o botão de enviar se o input estiver vazio
@@ -223,9 +229,11 @@
       if (!input.value.trim()) {
         sendBtn.disabled = true;
         sendBtn.classList.add("acw-send--disabled");
+        if (clearInputBtn) clearInputBtn.style.display = "none";
       } else {
         sendBtn.disabled = false;
         sendBtn.classList.remove("acw-send--disabled");
+        if (clearInputBtn) clearInputBtn.style.display = "";
       }
     }
     updateSendBtnState();
@@ -248,8 +256,8 @@
       });
     }
 
-    // estado
-    const history = []; // {role, content}[]
+    //* Estado
+    const history = [];
     let isOpen = false;
 
     function open() {
@@ -321,7 +329,7 @@
       // Cria controller para cancelar fetch
       currentAbortController = new AbortController();
 
-      // request
+      //* Request
       try {
         const user_id = getOrCreateUserId();
         const payload = CONFIG.api.buildPayload({
@@ -439,6 +447,12 @@
       sendMessage();
     });
     input?.addEventListener("input", () => {
+      autoresize(input);
+      updateSendBtnState();
+    });
+
+    clearInputBtn?.addEventListener("click", () => {
+      input.value = "";
       autoresize(input);
       updateSendBtnState();
     });
