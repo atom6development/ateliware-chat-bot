@@ -3,7 +3,25 @@
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
 <body>
   <h1>Demo Ateliware Chat</h1>
+  <label for="lang-select" style="font-weight:600;margin-right:8px;">Idioma:</label>
+  <select id="lang-select" style="margin-bottom:16px;">
+    <option value="pt-br">Português (BR)</option>
+    <option value="en">English</option>
+    <option value="es">Español</option>
+  </select>
+  <script>
+    document.getElementById('lang-select').addEventListener('change', function(e) {
+      window.setChatLanguage(e.target.value);
+    });
+  </script>
   <!-- use caminhos relativos durante o dev -->
   <script src="../src/ateliware-chat.widget.js" defer></script>
+  <script>
+    window.onload = function() {
+      setTimeout(() => {
+        window.setChatLanguage('pt-br'); // Troca para inglês. Use 'es' ou 'pt-br' se quiser outro idioma
+      }, 1000);
+    };
+  </script>
 </body>
 </html>

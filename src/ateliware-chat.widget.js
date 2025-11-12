@@ -5,6 +5,18 @@
  * Autor: Atomsix
  */
 (() => {
+  // ===== I18N =====
+  // Importa traduções
+  let t = (k) => k;
+  let currentLang = "pt-br";
+  let i18nMod = null;
+  async function loadI18n() {
+    try {
+      i18nMod = await import("./i18n.js");
+      t = (key) => i18nMod.t(key, currentLang);
+    } catch (e) {}
+  }
+  loadI18n();
   //* ===== HELPERS =====
   function getOrCreateUserId() {
     const key = "acw_user_id";
@@ -54,7 +66,8 @@
   // ===== CONFIGURAÇÃO =====
 
   //!Para produção usar a linha abaixo
-  const CDN_BASE = "https://cdn.jsdelivr.net/gh/atom6development/ateliware-chat-bot@v1.0.9/src/";
+  const CDN_BASE =
+    "https://cdn.jsdelivr.net/gh/atom6development/ateliware-chat-bot@v1.0.9/src/";
 
   //!Para desenvolvimento local remover comentário da linha abaixo
   //const CDN_BASE = "../src/";
@@ -99,6 +112,38 @@
 
   //* ===== MONTAGEM E EVENTOS =====
   async function boot() {
+    // Função para atualizar textos traduzíveis
+    function updateTranslations() {
+      if (!i18nMod) return;
+      if (input) input.placeholder = t("askPlaceholder");
+      if (sendBtn) sendBtn.setAttribute("aria-label", t("send"));
+      if (clearInputBtn) clearInputBtn.setAttribute("aria-label", t("clear"));
+      if (helloBlock) {
+        const h2 = helloBlock.querySelector("h2");
+        if (h2) h2.textContent = t("welcomeTitle");
+        const p = helloBlock.querySelector("p");
+        if (p) p.textContent = t("welcomeInfo");
+      }
+        // Atualiza texto do FAB
+        if (fab) {
+          const fabText = fab.querySelector('.fab-text');
+          if (fabText) fabText.textContent = t('fabText');
+        }
+    }
+    // Expor função global para trocar idioma
+    window.setChatLanguage = function (lang) {
+      const supported =
+        i18nMod && i18nMod.translations
+          ? Object.keys(i18nMod.translations)
+          : ["pt-br", "en", "es"];
+      currentLang = supported.includes(lang) ? lang : "pt-br";
+      t = (key) => (i18nMod ? i18nMod.t(key, currentLang) : key);
+      updateTranslations();
+    };
+    // Aplica traduções iniciais
+    updateTranslations();
+    // Exemplo: trocar idioma
+    // currentLang = 'en'; // ou 'es', 'pt-br'
     // Variável para controle de cancelamento
     let currentAbortController = null;
     // Limpa o chat de forma otimista: remove do front imediatamente, depois chama a API
@@ -223,6 +268,16 @@
     const sendBtn = shadow.querySelector(".acw-send");
     const clearInputBtn = shadow.querySelector(".acw-clear-input");
     const helloBlock = shadow.querySelector(".acw-hello");
+    // Aplica traduções básicas
+    if (input) input.placeholder = t("askPlaceholder");
+    if (sendBtn) sendBtn.setAttribute("aria-label", t("send"));
+    if (clearInputBtn) clearInputBtn.setAttribute("aria-label", t("clear"));
+    if (helloBlock) {
+      const h2 = helloBlock.querySelector("h2");
+      if (h2) h2.textContent = t("welcomeTitle");
+      const p = helloBlock.querySelector("p");
+      if (p) p.textContent = t("welcomeInfo");
+    }
 
     // desabilita o botão de enviar se o input estiver vazio
     function updateSendBtnState() {
