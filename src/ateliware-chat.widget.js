@@ -9,7 +9,7 @@
 
   //!Para produção usar a linha abaixo
   const CDN_BASE =
-    "https://cdn.jsdelivr.net/gh/atom6development/ateliware-chat-bot@v1.1.5/src/";
+    "https://cdn.jsdelivr.net/gh/atom6development/ateliware-chat-bot@v1.1.6/src/";
 
   //!Para desenvolvimento local remover comentário da linha abaixo
   // const CDN_BASE = "../src/";
@@ -328,27 +328,7 @@
       }
       // Força o foco no input - solução para Safari iOS
       if (input) {
-        // Remove readonly se tiver
-        input.removeAttribute('readonly');
-        
-        // Espera a transição do modal terminar antes de focar
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            // Scroll até o input para garantir que está visível
-            input.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            
-            // Foco com pequeno delay
-            setTimeout(() => {
-              input.focus({ preventScroll: true });
-              
-              // Fallback adicional para iOS
-              if (document.activeElement !== input) {
-                input.focus();
-                input.click();
-              }
-            }, 300);
-          });
-        });
+        input.focus();
       }
     }
     function close() {
