@@ -9,7 +9,7 @@
 
   //!Para produção usar a linha abaixo
   const CDN_BASE =
-    "https://cdn.jsdelivr.net/gh/atom6development/ateliware-chat-bot@v1.1.6/src/";
+    "https://cdn.jsdelivr.net/gh/atom6development/ateliware-chat-bot@main/src/";
 
   //!Para desenvolvimento local remover comentário da linha abaixo
   // const CDN_BASE = "../src/";
