@@ -326,10 +326,6 @@
       if (helloBlock && inbox.querySelector(".acw-msg")) {
         helloBlock.style.display = "none";
       }
-      // Força o foco no input - solução para Safari iOS
-      if (input) {
-        input.focus();
-      }
     }
     function close() {
       if (!isOpen) return;
