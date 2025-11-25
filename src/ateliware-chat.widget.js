@@ -326,18 +326,6 @@
       if (helloBlock && inbox.querySelector(".acw-msg")) {
         helloBlock.style.display = "none";
       }
-      if (window.visualViewport) {
-        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-        if (isIOS) {
-          input.focus();
-          visualViewport.addEventListener("resize", () => {
-            const viewportHeight = visualViewport.height;
-            // Exemplo: adiciona padding-bottom na div para "abrir espaço"
-            modal.style.paddingBottom =
-              window.innerHeight - viewportHeight + 20 + "px";
-          });
-        }
-      }
     }
     function close() {
       if (!isOpen) return;
@@ -345,7 +333,6 @@
       if (modal) modal.classList.remove("acw-open");
       if (overlay) overlay.classList.remove("acw-open");
       if (fab) fab.classList.remove("acw-fab--gradient");
-      fab?.focus();
     }
     function add(role, text) {
       const b = document.createElement("div");
