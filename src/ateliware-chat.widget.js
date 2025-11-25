@@ -9,7 +9,7 @@
 
   //!Para produção usar a linha abaixo
   const CDN_BASE =
-    "https://cdn.jsdelivr.net/gh/atom6development/ateliware-chat-bot@v1.1.4/src/";
+    "https://cdn.jsdelivr.net/gh/atom6development/ateliware-chat-bot@v1.1.5/src/";
 
   //!Para desenvolvimento local remover comentário da linha abaixo
   // const CDN_BASE = "../src/";
@@ -326,22 +326,29 @@
       if (helloBlock && inbox.querySelector(".acw-msg")) {
         helloBlock.style.display = "none";
       }
-      // Força o foco no input, especialmente importante no Safari iOS
+      // Força o foco no input - solução para Safari iOS
       if (input) {
-        // Primeiro foco imediato
-        input.focus();
-        // Segundo foco com delay para Safari iOS
-        setTimeout(() => {
-          input.focus();
-          // Trigger eventos necessários para iOS
-          const event = new Event('touchstart', { bubbles: true, cancelable: true });
-          input.dispatchEvent(event);
-        }, 50);
-        // Terceira tentativa mais longa para garantir
-        setTimeout(() => {
-          input.focus();
-          input.click();
-        }, 200);
+        // Remove readonly se tiver
+        input.removeAttribute('readonly');
+        
+        // Espera a transição do modal terminar antes de focar
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            // Scroll até o input para garantir que está visível
+            input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            // Foco com pequeno delay
+            setTimeout(() => {
+              input.focus({ preventScroll: true });
+              
+              // Fallback adicional para iOS
+              if (document.activeElement !== input) {
+                input.focus();
+                input.click();
+              }
+            }, 300);
+          });
+        });
       }
     }
     function close() {
@@ -490,7 +497,13 @@
     }
 
     // eventos
-    fab?.addEventListener("click", open);
+    fab?.addEventListener("click", () => {
+      if (isOpen) {
+        close();
+      } else {
+        open();
+      }
+    });
     overlay?.addEventListener("click", close);
     // Adiciona evento de clique nos cards
     const swiperCards = shadow.querySelector(".acw-swiper-cards");
