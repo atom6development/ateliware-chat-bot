@@ -142,8 +142,6 @@
       t = (key) => (i18nMod ? i18nMod.t(key, currentLang) : key);
       updateTranslations();
     };
-    // Aplica traduções iniciais
-    updateTranslations();
     // Exemplo: trocar idioma
     // currentLang = 'en'; // ou 'es', 'pt-br'
     // Variável para controle de cancelamento
@@ -270,16 +268,9 @@
     const sendBtn = shadow.querySelector(".acw-send");
     const clearInputBtn = shadow.querySelector(".acw-clear-input");
     const helloBlock = shadow.querySelector(".acw-hello");
-    // Aplica traduções básicas
-    if (input) input.placeholder = t("askPlaceholder");
-    if (sendBtn) sendBtn.setAttribute("aria-label", t("send"));
-    if (clearInputBtn) clearInputBtn.setAttribute("aria-label", t("clear"));
-    if (helloBlock) {
-      const h2 = helloBlock.querySelector("h2");
-      if (h2) h2.textContent = t("welcomeTitle");
-      const p = helloBlock.querySelector("p");
-      if (p) p.textContent = t("welcomeInfo");
-    }
+    
+    // Aplica traduções iniciais
+    updateTranslations();
 
     // desabilita o botão de enviar se o input estiver vazio
     function updateSendBtnState() {
