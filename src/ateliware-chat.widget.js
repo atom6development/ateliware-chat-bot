@@ -322,17 +322,26 @@
       if (modal) modal.classList.add("acw-open");
       if (overlay) overlay.classList.add("acw-open");
       if (fab) fab.classList.add("acw-fab--gradient");
-      // Força o foco no input, especialmente importante no Safari iOS
-      if (input) {
-        setTimeout(() => {
-          input.focus();
-          // Garante que o teclado apareça no iOS
-          input.click();
-        }, 100);
-      }
       // Se já houver mensagens, esconde o bloco hello
       if (helloBlock && inbox.querySelector(".acw-msg")) {
         helloBlock.style.display = "none";
+      }
+      // Força o foco no input, especialmente importante no Safari iOS
+      if (input) {
+        // Primeiro foco imediato
+        input.focus();
+        // Segundo foco com delay para Safari iOS
+        setTimeout(() => {
+          input.focus();
+          // Trigger eventos necessários para iOS
+          const event = new Event('touchstart', { bubbles: true, cancelable: true });
+          input.dispatchEvent(event);
+        }, 50);
+        // Terceira tentativa mais longa para garantir
+        setTimeout(() => {
+          input.focus();
+          input.click();
+        }, 200);
       }
     }
     function close() {
