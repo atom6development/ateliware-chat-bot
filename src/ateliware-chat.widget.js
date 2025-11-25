@@ -9,7 +9,7 @@
 
   //!Para produção usar a linha abaixo
   const CDN_BASE =
-    "https://cdn.jsdelivr.net/gh/atom6development/ateliware-chat-bot@main/src/";
+    "https://cdn.jsdelivr.net/gh/atom6development/ateliware-chat-bot@v1.1.7/src/";
 
   //!Para desenvolvimento local remover comentário da linha abaixo
   // const CDN_BASE = "../src/";
@@ -325,6 +325,18 @@
       // Se já houver mensagens, esconde o bloco hello
       if (helloBlock && inbox.querySelector(".acw-msg")) {
         helloBlock.style.display = "none";
+      }
+      if (window.visualViewport) {
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+        if (isIOS) {
+          input.focus();
+          visualViewport.addEventListener("resize", () => {
+            const viewportHeight = visualViewport.height;
+            // Exemplo: adiciona padding-bottom na div para "abrir espaço"
+            modal.style.paddingBottom =
+              window.innerHeight - viewportHeight + 20 + "px";
+          });
+        }
       }
     }
     function close() {
