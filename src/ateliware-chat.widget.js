@@ -9,7 +9,7 @@
 
   //!Para produção usar a linha abaixo
   const CDN_BASE =
-    "https://cdn.jsdelivr.net/gh/atom6development/ateliware-chat-bot@v1.1.2/src/";
+    "https://cdn.jsdelivr.net/gh/atom6development/ateliware-chat-bot@v1.1.3/src/";
 
   //!Para desenvolvimento local remover comentário da linha abaixo
   // const CDN_BASE = "../src/";
@@ -322,7 +322,14 @@
       if (modal) modal.classList.add("acw-open");
       if (overlay) overlay.classList.add("acw-open");
       if (fab) fab.classList.add("acw-fab--gradient");
-      input?.focus();
+      // Força o foco no input, especialmente importante no Safari iOS
+      if (input) {
+        setTimeout(() => {
+          input.focus();
+          // Garante que o teclado apareça no iOS
+          input.click();
+        }, 100);
+      }
       // Se já houver mensagens, esconde o bloco hello
       if (helloBlock && inbox.querySelector(".acw-msg")) {
         helloBlock.style.display = "none";
