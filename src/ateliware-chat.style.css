@@ -124,6 +124,7 @@
   height: 100%;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
 }
 
 .acw-messages .acw-hello h2 {
@@ -426,5 +427,14 @@
     right: 10px;
     width: calc(100vw - 20px);
     height: 70vh;
+  }
+  .acw-footer {
+    padding: 12px 16px;
+  }
+  .acw-messages {
+    padding: 8px 16px;
+  }
+  .acw-input {
+    font-size: 16px;
   }
 }

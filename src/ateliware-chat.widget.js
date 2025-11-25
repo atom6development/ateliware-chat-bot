@@ -67,10 +67,10 @@
 
   //!Para produção usar a linha abaixo
   const CDN_BASE =
-    "https://cdn.jsdelivr.net/gh/atom6development/ateliware-chat-bot@v1.0.9/src/";
+    "https://cdn.jsdelivr.net/gh/atom6development/ateliware-chat-bot@v1.1.0/src/";
 
   //!Para desenvolvimento local remover comentário da linha abaixo
-  //const CDN_BASE = "../src/";
+  // const CDN_BASE = "../src/";
 
   const CONFIG = {
     cssUrl: CDN_BASE + "ateliware-chat.style.css",
@@ -302,11 +302,19 @@
         if (!inputContainer.classList.contains("thinking")) {
           inputStar.src = CDN_BASE + "icon/stars.svg";
         }
+        // Ajusta o .acw-hello quando input recebe foco
+        if (helloBlock) {
+          helloBlock.style.justifyContent = "end";
+        }
       });
       input.addEventListener("blur", () => {
         // Só volta para cinza se não estiver "thinking"
         if (!inputContainer.classList.contains("thinking")) {
           inputStar.src = CDN_BASE + "icon/starsGray.svg";
+        }
+        // Volta ao normal quando perde foco
+        if (helloBlock) {
+          helloBlock.style.justifyContent = "";
         }
       });
     }
