@@ -5,16 +5,27 @@
  * Autor: Atomsix
  */
 (() => {
-  // ===== I18N =====
+  // ===== CONFIGURAÇÃO =====
+
+  //!Para produção usar a linha abaixo
+  const CDN_BASE =
+    "https://cdn.jsdelivr.net/gh/atom6development/ateliware-chat-bot@v1.1.1/src/";
+
+  //!Para desenvolvimento local remover comentário da linha abaixo
+  // const CDN_BASE = "../src/";
+
+  //* ===== I18N =====
   // Importa traduções
   let t = (k) => k;
   let currentLang = "pt-br";
   let i18nMod = null;
   async function loadI18n() {
     try {
-      i18nMod = await import("./i18n.js");
+      i18nMod = await import(CDN_BASE + "i18n.js");
       t = (key) => i18nMod.t(key, currentLang);
-    } catch (e) {}
+    } catch (e) {
+      console.error("Erro ao carregar i18n:", e);
+    }
   }
   loadI18n();
   //* ===== HELPERS =====
@@ -62,15 +73,6 @@
     ta.style.height = "auto";
     ta.style.height = Math.min(ta.scrollHeight, 120) + "px";
   };
-
-  // ===== CONFIGURAÇÃO =====
-
-  //!Para produção usar a linha abaixo
-  const CDN_BASE =
-    "https://cdn.jsdelivr.net/gh/atom6development/ateliware-chat-bot@v1.1.0/src/";
-
-  //!Para desenvolvimento local remover comentário da linha abaixo
-  // const CDN_BASE = "../src/";
 
   const CONFIG = {
     cssUrl: CDN_BASE + "ateliware-chat.style.css",
@@ -302,8 +304,8 @@
         if (!inputContainer.classList.contains("thinking")) {
           inputStar.src = CDN_BASE + "icon/stars.svg";
         }
-        // Ajusta o .acw-hello quando input recebe foco
-        if (helloBlock) {
+        // Ajusta o .acw-hello quando input recebe foco (apenas mobile)
+        if (helloBlock && window.innerWidth <= 480) {
           helloBlock.style.justifyContent = "end";
         }
       });
@@ -312,8 +314,8 @@
         if (!inputContainer.classList.contains("thinking")) {
           inputStar.src = CDN_BASE + "icon/starsGray.svg";
         }
-        // Volta ao normal quando perde foco
-        if (helloBlock) {
+        // Volta ao normal quando perde foco (apenas mobile)
+        if (helloBlock && window.innerWidth <= 480) {
           helloBlock.style.justifyContent = "";
         }
       });
