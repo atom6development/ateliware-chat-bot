@@ -9,10 +9,10 @@
 
   //!Para produção usar a linha abaixo
   const CDN_BASE =
-    "https://cdn.jsdelivr.net/gh/atom6development/ateliware-chat-bot@v1.1.8/src/";
+    "https://cdn.jsdelivr.net/gh/atom6development/ateliware-chat-bot@v1.1.9/src/";
 
   //!Para desenvolvimento local remover comentário da linha abaixo
-  // const CDN_BASE = "../src/";
+    //const CDN_BASE = "../src/";
 
   //* ===== I18N =====
   // Importa traduções
@@ -89,7 +89,8 @@
           "Bearer 4e7c8bcd1f73f50c3a65af18c6d6f83e0f3e7a8f29c94c2d1a142a2e7bcd873f",
       },
       timeoutMs: 30000,
-      buildPayload: ({ message, user_id }) => {
+      buildPayload: (params = {}) => {
+        const { message, user_id, language } = params;
         const conversation_id = localStorage.getItem("acw_conversation_id");
         const payload = {
           user_id,
@@ -97,6 +98,9 @@
         };
         if (conversation_id) {
           payload.conversation_id = conversation_id;
+        }
+        if (typeof language !== 'undefined') {
+          payload.language = language;
         }
         return payload;
       },
@@ -187,7 +191,11 @@
       const node = tpl.content.firstElementChild.cloneNode(true);
       const textEl = node.querySelector(".acw-assistant-text");
       // Usa linkify para transformar URLs em links clicáveis
-      textEl.innerHTML = linkify(text);
+      if (isPending) {
+        textEl.innerHTML = linkify(t('thinking'));
+      } else {
+        textEl.innerHTML = linkify(text);
+      }
       if (isPending) node.classList.add("acw-msg--pending");
       inbox.appendChild(node);
       if (helloBlock) helloBlock.style.display = "none";
@@ -386,10 +394,12 @@
       //* Request
       try {
         const user_id = getOrCreateUserId();
+        // Garante que language sempre é definido
         const payload = CONFIG.api.buildPayload({
           history: history.slice(),
           message: text,
           user_id,
+          language: typeof currentLang !== 'undefined' ? currentLang : 'pt-br',
         });
         // fetch com abortController
         const res = await fetchWithTimeout(

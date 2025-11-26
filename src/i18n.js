@@ -6,6 +6,7 @@ export const translations = {
     fabText: 'Pergunte à IA',
     welcomeTitle: 'Olá, pergunte qualquer coisa sobre a Ateliware.',
     welcomeInfo: 'Nossa IA pode cometer erros. Sempre confirme as informações entrando em contato.',
+    thinking: 'Pensando...'
   },
   en: {
     askPlaceholder: 'Ask your question',
@@ -14,6 +15,7 @@ export const translations = {
     fabText: 'Ask the AI',
     welcomeTitle: 'Hello, ask anything about Ateliware.',
     welcomeInfo: 'Our AI may make mistakes. Always confirm information by contacting us.',
+    thinking: 'Thinking...'
   },
   es: {
     askPlaceholder: 'Haz tu pregunta',
@@ -22,6 +24,7 @@ export const translations = {
     fabText: 'Pregunta a la IA',
     welcomeTitle: 'Hola, pregunta cualquier cosa sobre Ateliware.',
     welcomeInfo: 'Nuestra IA puede cometer errores. Siempre confirma la información contactando.',
+    thinking: 'Pensando...'
   }
 };
 
